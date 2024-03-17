@@ -1,11 +1,14 @@
-# Use Maven image to build the war file
-FROM maven:3.6.3-jdk-11 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package
+# Use the official Tomcat 10.0.23 image as the base
+FROM tomcat:10.0.23-jdk11
 
-# Use Tomcat official image to deploy the war
-FROM tomcat:9-jdk11-openjdk-slim
-COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/
+# Set the working directory inside the container
+WORKDIR /usr/local/tomcat/webapps
+
+# Copy MavenWebProject.war file into the webapps directory
+COPY target/MavenWebProject.war .
+
+# Expose port 8080 (Tomcat default port)
 EXPOSE 8080
+
+# Start Tomcat when the container runs
 CMD ["catalina.sh", "run"]
