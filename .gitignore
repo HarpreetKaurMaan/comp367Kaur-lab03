@@ -1,0 +1,26 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### Eclipse ###
+.classpath
+.project
+.settings/
+*.wtpmodules
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Maven
+log/
+target/
+
+# Windows folder artifacts
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Mac folder artifacts
+.DS_Store
