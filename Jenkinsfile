@@ -1,56 +1,44 @@
-pipeline {
-    agent any
-    environment {
-        // Define your Docker Hub credentials ID here
-        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-    }
-    tools {
-        // Just make sure these tool names are configured in your Jenkins global tools
+pipeline{
+  agent any
+  tools{
         maven 'MAVEN3'
-        jdk 'OracleJDK8'
     }
-    stages {
-        stage('Checkout') {
-            steps {
+    stages{
+        stage('Checkout & Build Maven Project') {
+            steps{
                 checkout scm
+                bat 'mvn clean install'
             }
         }
-        stage('Build Maven Project') {
+        stage('Code Coverage (JaCoCo)') {
             steps {
-                // Use 'bat' instead of 'sh' on Windows
-                bat 'mvn clean package'
-            }
-        }
-        stage('Code Coverage') {
-            steps {
-                // Use 'bat' instead of 'sh' on Windows
-                bat 'mvn jacoco:report'
+                bat 'mvn jacoco:prepare-agent test jacoco:report'
             }
         }
         stage('Docker Build') {
-            steps {
-                script {
-                    // The 'docker' step typically works on both Unix and Windows without modification
-                    dockerImage = docker.build "harkaurmaan/myapp:${env.BUILD_ID}"
+            steps{
+                script{
+                    bat 'docker build -t harkaurmaan/myapp .'
                 }
             }
         }
-        stage('Docker Login') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
-                        // This will log in to Docker Hub using the credentials stored in Jenkins
+        stage('Docker Login'){
+            steps{
+                script{
+
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    bat 'docker login --username %DOCKER_USERNAME% --password %DOCKER_PASSWORD%'
                     }
                 }
             }
-        }
-        stage('Docker Push') {
-            steps {
-                script {
-                    // The 'dockerImage.push()' command will work on both Unix and Windows without modification
-                    dockerImage.push()
+  		}
+  		stage('Docker Push'){
+            steps{
+                script{
+
+                    bat 'docker push harkaurmaan/myapp:latest'
                 }
             }
-        }
-    }
+  		}
+	}
 }
