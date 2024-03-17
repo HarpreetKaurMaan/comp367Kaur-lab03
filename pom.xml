@@ -22,15 +22,18 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>301200841HarpreetLab2</finalName>
-		<finalName>MavenWebProject</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>      
-        <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.10</version>
-        </plugin>
+  <finalName>301200841HarpreetLab2</finalName>
+  <plugins>      
+    <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.10</version>
+    </plugin>
+    <!-- Other plugins as needed -->
+  </plugins>
+</build>
+<!-- Dependency management as before -->
+
 	</build>
 	<dependencyManagement>
 		<dependencies>
