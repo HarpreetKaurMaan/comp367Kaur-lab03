@@ -4,6 +4,11 @@ pipeline {
         // Define your Docker Hub credentials ID here
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
+    tools {
+        // Just make sure these tool names are configured in your Jenkins global tools
+        maven 'MAVEN3'
+        jdk 'OracleJDK8'
+    }
     stages {
         stage('Checkout') {
             steps {
