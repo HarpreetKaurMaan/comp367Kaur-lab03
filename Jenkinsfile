@@ -12,17 +12,20 @@ pipeline {
         }
         stage('Build Maven Project') {
             steps {
-                sh 'mvn clean package'
+                // Use 'bat' instead of 'sh' on Windows
+                bat 'mvn clean package'
             }
         }
         stage('Code Coverage') {
             steps {
-                sh 'mvn jacoco:report'
+                // Use 'bat' instead of 'sh' on Windows
+                bat 'mvn jacoco:report'
             }
         }
         stage('Docker Build') {
             steps {
                 script {
+                    // The 'docker' step typically works on both Unix and Windows without modification
                     dockerImage = docker.build "harkaurmaan/myapp:${env.BUILD_ID}"
                 }
             }
@@ -39,6 +42,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
+                    // The 'dockerImage.push()' command will work on both Unix and Windows without modification
                     dockerImage.push()
                 }
             }
